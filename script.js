@@ -177,8 +177,10 @@
     }
 
     function renderRecipeRows(tbody, recipes, opts) {
-        recipes.forEach(recipe => {
+        recipes.forEach((recipe, i) => {
             const tr = el('tr');
+            tr.classList.add('stream-in');
+            tr.style.animationDelay = `${1.4 + i * 0.04}s`;
 
             const inputsTd = el('td');
             inputsTd.appendChild(renderInputsCell(recipe.inputs));
@@ -191,12 +193,35 @@
     }
 
     // ---------- Top-level render ----------
+    function triggerScreenAnimations() {
+        const screens = els.holoPanels.querySelectorAll('.holo-screen');
+        screens.forEach(screen => {
+            // Reset animation
+            screen.classList.remove('materializing');
+            void screen.offsetWidth; // force reflow
+            screen.classList.add('materializing');
+
+            // Inject scan bar
+            const bezel = screen.querySelector('.screen-bezel');
+            const oldBar = bezel.querySelector('.scan-bar');
+            if (oldBar) oldBar.remove();
+            const bar = document.createElement('div');
+            bar.className = 'scan-bar';
+            bezel.appendChild(bar);
+            // Clean up after animation
+            bar.addEventListener('animationend', () => bar.remove());
+        });
+    }
+
     function render(result) {
+        const wasHidden = els.holoPanels.classList.contains('hidden');
         els.welcome.classList.add('hidden');
         els.holoPanels.classList.remove('hidden');
 
         els.inputResults.replaceChildren();
         els.outputResults.replaceChildren();
+
+        triggerScreenAnimations();
 
         if (result.asInput.length === 0) {
             renderEmptyRow(els.inputResults, 'No synthesis blueprints utilize this element.');

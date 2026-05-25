@@ -491,6 +491,81 @@ button:hover {
     color: var(--neon-green);
 }
 
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+/* --- Holo screen power-on --- */
+@keyframes holo-materialize {
+    0%   { opacity: 0; transform: perspective(900px) rotateX(8deg) scaleY(0.02) scaleX(0.6); filter: brightness(3) blur(6px); }
+    25%  { opacity: 1; transform: perspective(900px) rotateX(5deg) scaleY(0.04) scaleX(1);   filter: brightness(2.5) blur(3px); }
+    35%  { opacity: 1; transform: perspective(900px) rotateX(4deg) scaleY(0.6)  scaleX(1);   filter: brightness(1.8) blur(1px); }
+    50%  { opacity: 0.6; transform: perspective(900px) rotateX(3deg) scaleY(0.55) scaleX(1);  filter: brightness(1) blur(0); }
+    55%  { opacity: 1; transform: perspective(900px) rotateX(3deg) scaleY(1)    scaleX(1);   filter: brightness(1.4) blur(0); }
+    70%  { opacity: 0.85; }
+    75%  { opacity: 1; }
+    100% { opacity: 1; transform: perspective(900px) rotateX(2deg) scaleY(1)    scaleX(1);   filter: brightness(1) blur(0); }
+}
+
+/* Scan-line sweep across screen on activation */
+@keyframes scan-sweep {
+    0%   { top: -4px; opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* Beat 1: Screens power on (0s – 0.8s) */
+.holo-screen.materializing {
+    animation: holo-materialize 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.holo-screen.materializing:nth-child(2) {
+    animation-delay: 0.15s;
+    opacity: 0;
+}
+
+/* Beat 2: Scan sweep (starts after screens are up, ~0.9s) */
+.screen-bezel .scan-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(180deg,
+        transparent,
+        rgba(0, 240, 255, 0.6),
+        rgba(0, 240, 255, 0.15),
+        transparent
+    );
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.5);
+    z-index: 5;
+    pointer-events: none;
+    animation: scan-sweep 0.5s ease-out forwards;
+    animation-delay: 0.9s;
+    top: -4px;
+    opacity: 0;
+}
+
+.holo-screen:nth-child(2) .scan-bar {
+    animation-delay: 1.05s;
+}
+
+@keyframes scan-sweep {
+    0%   { top: -4px; opacity: 1; }
+    80%  { opacity: 0.6; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* Beat 3: Row cascade (starts after scan finishes, ~1.4s) */
+@keyframes row-stream {
+    0%   { opacity: 0; transform: translateX(-12px); }
+    60%  { opacity: 1; transform: translateX(2px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+tr.stream-in {
+    opacity: 0;
+    animation: row-stream 0.25s ease-out forwards;
+}
+
 /* ---------- Utility ---------- */
 .hidden {
     display: none !important;
