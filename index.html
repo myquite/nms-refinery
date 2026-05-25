@@ -15,12 +15,16 @@
     </header>
 
     <div class="search-box">
-        <input
-            type="text"
-            id="search-input"
-            placeholder="ENTER INGREDIENT ELEMENT (e.g., Carbon, Oxygen, Tritium)..."
-            autocomplete="off"
-        >
+        <div class="search-wrapper">
+            <span class="prompt-symbol">&gt;</span>
+            <input
+                type="text"
+                id="search-input"
+                placeholder="ENTER INGREDIENT ELEMENT (e.g., Carbon, Oxygen, Tritium)..."
+                autocomplete="off"
+            >
+            <ul id="autocomplete-list" class="ac-list hidden"></ul>
+        </div>
         <button id="search-btn">Analyze</button>
     </div>
 

@@ -21,7 +21,48 @@
         welcome:        document.getElementById('welcome-message'),
         inputResults:   document.getElementById('input-results'),
         outputResults:  document.getElementById('output-results'),
+        autocomplete:   document.getElementById('autocomplete-list'),
     };
+
+    // ---------- Autocomplete ----------
+    // Build sorted list of every unique ingredient/output name in the DB.
+    const allNames = [...new Set(
+        REFINER_DB.flatMap(r => [r.output, ...r.inputs.map(i => i.name)])
+    )].sort();
+
+    let acIndex = -1;   // currently highlighted suggestion
+
+    function showSuggestions(query) {
+        const q = query.trim().toLowerCase();
+        els.autocomplete.replaceChildren();
+        acIndex = -1;
+
+        if (!q) { els.autocomplete.classList.add('hidden'); return; }
+
+        const matches = allNames.filter(n => n.toLowerCase().includes(q));
+        if (matches.length === 0) { els.autocomplete.classList.add('hidden'); return; }
+
+        matches.forEach(name => {
+            const li = el('li', 'ac-item', name);
+            li.dataset.value = name;
+            els.autocomplete.appendChild(li);
+        });
+        els.autocomplete.classList.remove('hidden');
+    }
+
+    function pickSuggestion(name) {
+        els.autocomplete.classList.add('hidden');
+        searchFor(name);
+    }
+
+    function highlightItem(idx) {
+        const items = els.autocomplete.children;
+        if (!items.length) return;
+        acIndex = ((idx % items.length) + items.length) % items.length;
+        Array.from(items).forEach((li, i) =>
+            li.classList.toggle('ac-active', i === acIndex));
+        items[acIndex].scrollIntoView({ block: 'nearest' });
+    }
 
     // ---------- Search ----------
     // Pure function: takes a query, returns matching recipes split by role.
@@ -162,10 +203,44 @@
     }
 
     // ---------- Event wiring ----------
-    els.searchBtn.addEventListener('click', () => runSearch(els.searchInput.value));
+    els.searchBtn.addEventListener('click', () => {
+        els.autocomplete.classList.add('hidden');
+        runSearch(els.searchInput.value);
+    });
 
-    els.searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') runSearch(els.searchInput.value);
+    els.searchInput.addEventListener('input', () => showSuggestions(els.searchInput.value));
+
+    els.searchInput.addEventListener('keydown', (e) => {
+        const items = els.autocomplete.children;
+        if (e.key === 'ArrowDown' && items.length) {
+            e.preventDefault();
+            highlightItem(acIndex + 1);
+        } else if (e.key === 'ArrowUp' && items.length) {
+            e.preventDefault();
+            highlightItem(acIndex - 1);
+        } else if (e.key === 'Enter') {
+            if (acIndex >= 0 && items[acIndex]) {
+                e.preventDefault();
+                pickSuggestion(items[acIndex].dataset.value);
+            } else {
+                els.autocomplete.classList.add('hidden');
+                runSearch(els.searchInput.value);
+            }
+        } else if (e.key === 'Escape') {
+            els.autocomplete.classList.add('hidden');
+        }
+    });
+
+    els.autocomplete.addEventListener('click', (e) => {
+        const item = e.target.closest('.ac-item');
+        if (item) pickSuggestion(item.dataset.value);
+    });
+
+    // Close autocomplete when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!els.searchInput.contains(e.target) && !els.autocomplete.contains(e.target)) {
+            els.autocomplete.classList.add('hidden');
+        }
     });
 
     // One delegated listener handles every ingredient link, present or future.
