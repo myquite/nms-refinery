@@ -646,6 +646,27 @@ tr.stream-in {
     display: none !important;
 }
 
+/* ---------- Attribution ---------- */
+.attribution {
+    text-align: center;
+    font-size: 0.55rem;
+    color: rgba(0, 240, 255, 0.15);
+    letter-spacing: 1px;
+    padding-top: 8px;
+    text-transform: uppercase;
+}
+
+.attribution a {
+    color: rgba(0, 240, 255, 0.25);
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(0, 240, 255, 0.15);
+    transition: color 0.2s;
+}
+
+.attribution a:hover {
+    color: var(--neon-cyan);
+}
+
 /* ---------- Ambient effects ---------- */
 .workstation::before {
     content: "";
@@ -658,4 +679,145 @@ tr.stream-in {
     background: radial-gradient(ellipse at center, rgba(0, 160, 255, 0.03) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+   ============================================================ */
+
+/* Tablets and small desktops */
+@media (max-width: 900px) {
+    .holo-panels {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 20px 20px 12px;
+        overflow-y: auto;
+    }
+
+    .desk-surface {
+        padding: 1rem 24px 18px;
+    }
+
+    h1 {
+        font-size: 1.1rem;
+        letter-spacing: 3px;
+    }
+
+    .console-status-bar {
+        gap: 16px;
+    }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+    body {
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .workstation {
+        height: 100dvh;
+    }
+
+    .holo-panels {
+        padding: 12px 12px 8px;
+        gap: 12px;
+    }
+
+    .screen-label {
+        font-size: 0.6rem;
+    }
+
+    .screen-id {
+        display: none;
+    }
+
+    td, th {
+        padding: 8px 10px;
+        font-size: 0.75rem;
+    }
+
+    th {
+        font-size: 0.6rem;
+    }
+
+    .desk-surface {
+        padding: 0.75rem 14px 14px;
+    }
+
+    h1 {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        margin: 0.5rem 0 4px 0;
+    }
+
+    h1 .version {
+        font-size: 0.6rem;
+    }
+
+    .subtitle {
+        font-size: 0.55rem;
+        letter-spacing: 1.5px;
+    }
+
+    header {
+        margin-bottom: 0.6rem;
+    }
+
+    .console-input-area {
+        gap: 8px;
+    }
+
+    .prompt-symbol {
+        padding: 8px 4px 8px 8px;
+        font-size: 1rem;
+    }
+
+    input[type="text"] {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+
+    .ghost-text {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+    }
+
+    input[type="text"]::placeholder {
+        font-size: 0.65rem;
+    }
+
+    button {
+        padding: 0 14px;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+    }
+
+    .console-status-bar {
+        gap: 10px;
+        font-size: 0.5rem;
+        letter-spacing: 1px;
+    }
+
+    .ac-list {
+        max-height: 180px;
+    }
+
+    .ac-item {
+        padding: 7px 14px 7px 22px;
+        font-size: 0.8rem;
+    }
+
+    .error-code {
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+    }
+
+    .error-detail {
+        font-size: 0.65rem;
+    }
+
+    .attribution {
+        font-size: 0.5rem;
+    }
 }
