@@ -259,6 +259,10 @@
         els.errorQuery.textContent = '> ' + query;
     }
 
+    function blurOnMobile() {
+        if ('ontouchstart' in window) els.searchInput.blur();
+    }
+
     function runSearch(query) {
         const result = search(query);
 
@@ -271,10 +275,12 @@
         // No matches at all — show error state
         if (result.asInput.length === 0 && result.asOutput.length === 0) {
             showError(query);
+            blurOnMobile();
             return;
         }
 
         render(result);
+        blurOnMobile();
     }
 
     function searchFor(name) {
