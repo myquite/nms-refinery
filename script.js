@@ -17,11 +17,12 @@
     const els = {
         searchInput:    document.getElementById('search-input'),
         searchBtn:      document.getElementById('search-btn'),
-        results:        document.getElementById('results-container'),
+        holoPanels:     document.querySelector('.holo-panels'),
         welcome:        document.getElementById('welcome-message'),
         inputResults:   document.getElementById('input-results'),
         outputResults:  document.getElementById('output-results'),
         autocomplete:   document.getElementById('autocomplete-list'),
+        ghostText:      document.getElementById('ghost-text'),
     };
 
     // ---------- Autocomplete ----------
@@ -31,16 +32,44 @@
     )].sort();
 
     let acIndex = -1;   // currently highlighted suggestion
+    let ghostMatch = null; // current ghost-text completion target
+
+    function updateGhost(query, matches) {
+        const q = query.trim();
+        if (!q || matches.length === 0) {
+            els.ghostText.textContent = '';
+            ghostMatch = null;
+            return;
+        }
+        // Find the best prefix match (starts with typed text)
+        const prefixMatch = matches.find(n => n.toLowerCase().startsWith(q.toLowerCase()));
+        if (prefixMatch) {
+            // Show the typed portion (invisible) + the remaining portion (visible)
+            els.ghostText.textContent = q + prefixMatch.slice(q.length);
+            ghostMatch = prefixMatch;
+        } else {
+            els.ghostText.textContent = '';
+            ghostMatch = null;
+        }
+    }
 
     function showSuggestions(query) {
         const q = query.trim().toLowerCase();
         els.autocomplete.replaceChildren();
         acIndex = -1;
 
-        if (!q) { els.autocomplete.classList.add('hidden'); return; }
+        if (!q) {
+            els.autocomplete.classList.add('hidden');
+            updateGhost('', []);
+            return;
+        }
 
         const matches = allNames.filter(n => n.toLowerCase().includes(q));
-        if (matches.length === 0) { els.autocomplete.classList.add('hidden'); return; }
+        if (matches.length === 0) {
+            els.autocomplete.classList.add('hidden');
+            updateGhost('', []);
+            return;
+        }
 
         matches.forEach(name => {
             const li = el('li', 'ac-item', name);
@@ -48,10 +77,13 @@
             els.autocomplete.appendChild(li);
         });
         els.autocomplete.classList.remove('hidden');
+        updateGhost(query, matches);
     }
 
     function pickSuggestion(name) {
         els.autocomplete.classList.add('hidden');
+        els.ghostText.textContent = '';
+        ghostMatch = null;
         searchFor(name);
     }
 
@@ -161,7 +193,7 @@
     // ---------- Top-level render ----------
     function render(result) {
         els.welcome.classList.add('hidden');
-        els.results.classList.remove('hidden');
+        els.holoPanels.classList.remove('hidden');
 
         els.inputResults.replaceChildren();
         els.outputResults.replaceChildren();
@@ -205,6 +237,8 @@
     // ---------- Event wiring ----------
     els.searchBtn.addEventListener('click', () => {
         els.autocomplete.classList.add('hidden');
+        els.ghostText.textContent = '';
+        ghostMatch = null;
         runSearch(els.searchInput.value);
     });
 
@@ -212,7 +246,14 @@
 
     els.searchInput.addEventListener('keydown', (e) => {
         const items = els.autocomplete.children;
-        if (e.key === 'ArrowDown' && items.length) {
+        if (e.key === 'Tab' && ghostMatch) {
+            e.preventDefault();
+            els.searchInput.value = ghostMatch;
+            els.ghostText.textContent = '';
+            ghostMatch = null;
+            showSuggestions(els.searchInput.value);
+            return;
+        } else if (e.key === 'ArrowDown' && items.length) {
             e.preventDefault();
             highlightItem(acIndex + 1);
         } else if (e.key === 'ArrowUp' && items.length) {
@@ -245,7 +286,7 @@
 
     // One delegated listener handles every ingredient link, present or future.
     // No inline handlers, no name-escaping concerns.
-    els.results.addEventListener('click', (e) => {
+    els.holoPanels.addEventListener('click', (e) => {
         const link = e.target.closest('.ingredient-link');
         if (link && link.dataset.ingredient) {
             searchFor(link.dataset.ingredient);

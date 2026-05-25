@@ -8,63 +8,108 @@
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>REFINER MATRIX v6.24</h1>
-        <div class="subtitle">Interstellar Ingredient Mapping Terminal</div>
-    </header>
+<div class="workstation">
 
-    <div class="search-box">
-        <div class="search-wrapper">
-            <span class="prompt-symbol">&gt;</span>
-            <input
-                type="text"
-                id="search-input"
-                placeholder="ENTER INGREDIENT ELEMENT (e.g., Carbon, Oxygen, Tritium)..."
-                autocomplete="off"
-            >
-            <ul id="autocomplete-list" class="ac-list hidden"></ul>
-        </div>
-        <button id="search-btn">Analyze</button>
-    </div>
+    <!-- Floating holographic panels -->
+    <div class="holo-panels hidden">
 
-    <div id="results-container" class="results-section hidden">
-
-        <div class="panel">
-            <div class="panel-title">Component Utility (Used as Input)</div>
-            <div class="recipe-table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Inputs Needed</th>
-                            <th>Target Output</th>
-                        </tr>
-                    </thead>
-                    <tbody id="input-results"></tbody>
-                </table>
+        <div class="holo-screen panel-left">
+            <div class="screen-bezel">
+                <div class="bezel-corner tl"></div>
+                <div class="bezel-corner tr"></div>
+                <div class="bezel-corner bl"></div>
+                <div class="bezel-corner br"></div>
+                <div class="screen-header">
+                    <span class="status-dot green"></span>
+                    <span class="screen-label">Component Utility (Used as Input)</span>
+                    <span class="screen-id">SCR-01</span>
+                </div>
+                <div class="screen-content">
+                    <div class="recipe-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Inputs Needed</th>
+                                    <th>Target Output</th>
+                                </tr>
+                            </thead>
+                            <tbody id="input-results"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-title">Synthesis Path Matrix (Produced as Output)</div>
-            <div class="recipe-table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Required Base Inputs</th>
-                            <th>Yield</th>
-                        </tr>
-                    </thead>
-                    <tbody id="output-results"></tbody>
-                </table>
+        <div class="holo-screen panel-right">
+            <div class="screen-bezel">
+                <div class="bezel-corner tl"></div>
+                <div class="bezel-corner tr"></div>
+                <div class="bezel-corner bl"></div>
+                <div class="bezel-corner br"></div>
+                <div class="screen-header">
+                    <span class="status-dot cyan"></span>
+                    <span class="screen-label">Synthesis Path Matrix (Produced as Output)</span>
+                    <span class="screen-id">SCR-02</span>
+                </div>
+                <div class="screen-content">
+                    <div class="recipe-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Required Base Inputs</th>
+                                    <th>Yield</th>
+                                </tr>
+                            </thead>
+                            <tbody id="output-results"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <div id="welcome-message" class="no-results">
+    <div id="results-container" class="hidden"></div>
+
+    <div id="welcome-message" class="welcome-msg">
+        <div class="welcome-icon">&#9670;</div>
         System online. Awaiting data input sequence...
     </div>
+
+    <!-- Console desk surface -->
+    <div class="console-desk">
+        <div class="desk-surface">
+            <div class="desk-edge"></div>
+            <header>
+                <h1>REFINER MATRIX <span class="version">v6.24</span></h1>
+                <div class="subtitle">Interstellar Ingredient Mapping Terminal</div>
+            </header>
+            <div class="console-input-area">
+                <div class="search-wrapper">
+                    <span class="prompt-symbol">&gt;</span>
+                    <div class="input-ghost-wrapper">
+                        <span id="ghost-text" class="ghost-text" aria-hidden="true"></span>
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="ENTER ELEMENT (e.g., Carbon, Oxygen, Tritium)..."
+                            autocomplete="off"
+                        >
+                    </div>
+                    <ul id="autocomplete-list" class="ac-list hidden"></ul>
+                </div>
+                <button id="search-btn">
+                    <span class="btn-icon">&#9655;</span> Analyze
+                </button>
+            </div>
+            <div class="console-status-bar">
+                <span class="status-item"><span class="status-dot green"></span> REFINER ONLINE</span>
+                <span class="status-item">DB: 319 RECIPES</span>
+                <span class="status-item">SIGNAL: NOMINAL</span>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <!-- Data and logic. data.js must load before script.js. -->
