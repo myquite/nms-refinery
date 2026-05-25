@@ -24,14 +24,15 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
-    background-color: var(--dark-space);
+    background-color: #000;
     background-image:
-        radial-gradient(ellipse at 50% 0%, rgba(0, 140, 255, 0.08) 0%, transparent 60%),
-        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
-    background-size: 100% 100%, 550px 550px, 350px 350px, 250px 250px;
-    background-position: center top, 0 0, 40px 60px, 130px 270px;
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 3px,
+            rgba(255, 255, 255, 0.02) 3px,
+            rgba(255, 255, 255, 0.02) 4px
+        );
     color: #c8d0dc;
     font-family: 'Source Code Pro', monospace;
     margin: 0;
@@ -65,7 +66,6 @@ body {
 
 .holo-screen {
     position: relative;
-    transform: perspective(900px) rotateX(2deg);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
     display: flex;
     flex-direction: column;
@@ -73,7 +73,7 @@ body {
 }
 
 .holo-screen:hover {
-    transform: perspective(900px) rotateX(0deg) scale(1.01);
+    transform: scale(1.01);
 }
 
 .screen-bezel {
@@ -300,21 +300,21 @@ tr:hover {
             rgba(10, 16, 30, 0.97) 0%,
             rgba(8, 12, 22, 0.99) 100%
         );
-    padding: 20px 50px 24px;
+    padding: 1rem 50px 24px;
     border-top: 1px solid rgba(0, 200, 255, 0.08);
 }
 
 /* ---------- Header (on the desk) ---------- */
 header {
     text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: 1rem;
 }
 
 h1 {
     font-family: 'Orbitron', sans-serif;
     color: var(--neon-cyan);
     letter-spacing: 6px;
-    margin: 0 0 6px 0;
+    margin: 1rem 0 6px 0;
     font-size: 1.4rem;
     text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
 }
@@ -497,14 +497,13 @@ button:hover {
 
 /* --- Holo screen power-on --- */
 @keyframes holo-materialize {
-    0%   { opacity: 0; transform: perspective(900px) rotateX(8deg) scaleY(0.02) scaleX(0.6); filter: brightness(3) blur(6px); }
-    25%  { opacity: 1; transform: perspective(900px) rotateX(5deg) scaleY(0.04) scaleX(1);   filter: brightness(2.5) blur(3px); }
-    35%  { opacity: 1; transform: perspective(900px) rotateX(4deg) scaleY(0.6)  scaleX(1);   filter: brightness(1.8) blur(1px); }
-    50%  { opacity: 0.6; transform: perspective(900px) rotateX(3deg) scaleY(0.55) scaleX(1);  filter: brightness(1) blur(0); }
-    55%  { opacity: 1; transform: perspective(900px) rotateX(3deg) scaleY(1)    scaleX(1);   filter: brightness(1.4) blur(0); }
-    70%  { opacity: 0.85; }
-    75%  { opacity: 1; }
-    100% { opacity: 1; transform: perspective(900px) rotateX(2deg) scaleY(1)    scaleX(1);   filter: brightness(1) blur(0); }
+    0%   { opacity: 0;    filter: brightness(3) blur(6px); }
+    20%  { opacity: 0.4;  filter: brightness(2.5) blur(3px); }
+    35%  { opacity: 1;    filter: brightness(1.8) blur(1px); }
+    50%  { opacity: 0.5;  filter: brightness(1) blur(0); }
+    60%  { opacity: 1;    filter: brightness(1.4) blur(0); }
+    75%  { opacity: 0.85; filter: brightness(1) blur(0); }
+    100% { opacity: 1;    filter: brightness(1) blur(0); }
 }
 
 /* Scan-line sweep across screen on activation */
@@ -580,7 +579,7 @@ tr.stream-in {
     width: 120%;
     height: 100%;
     transform: translateX(-50%);
-    background: radial-gradient(ellipse at center, rgba(0, 160, 255, 0.04) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(0, 160, 255, 0.03) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
 }
