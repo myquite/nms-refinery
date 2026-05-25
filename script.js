@@ -19,6 +19,8 @@
         searchBtn:      document.getElementById('search-btn'),
         holoPanels:     document.querySelector('.holo-panels'),
         welcome:        document.getElementById('welcome-message'),
+        errorMsg:       document.getElementById('error-message'),
+        errorQuery:     document.querySelector('.error-query'),
         inputResults:   document.getElementById('input-results'),
         outputResults:  document.getElementById('output-results'),
         autocomplete:   document.getElementById('autocomplete-list'),
@@ -214,8 +216,8 @@
     }
 
     function render(result) {
-        const wasHidden = els.holoPanels.classList.contains('hidden');
         els.welcome.classList.add('hidden');
+        els.errorMsg.classList.add('hidden');
         els.holoPanels.classList.remove('hidden');
 
         els.inputResults.replaceChildren();
@@ -241,16 +243,32 @@
     }
 
     // ---------- Controller ----------
+    function showError(query) {
+        els.welcome.classList.add('hidden');
+        els.holoPanels.classList.add('hidden');
+        els.errorMsg.classList.add('hidden');
+
+        // Re-trigger animation
+        void els.errorMsg.offsetWidth;
+        els.errorMsg.classList.remove('hidden');
+        els.errorQuery.textContent = '> ' + query;
+    }
+
     function runSearch(query) {
         const result = search(query);
 
-        // FIX #3 (UX quick win): empty input used to silently do nothing.
-        // Give the user feedback instead.
         if (result === null) {
             els.searchInput.focus();
             els.searchInput.placeholder = '!! NO INPUT DETECTED — ENTER ELEMENT NAME ...';
             return;
         }
+
+        // No matches at all — show error state
+        if (result.asInput.length === 0 && result.asOutput.length === 0) {
+            showError(query);
+            return;
+        }
+
         render(result);
     }
 

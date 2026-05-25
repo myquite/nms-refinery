@@ -565,6 +565,82 @@ tr.stream-in {
     animation: row-stream 0.25s ease-out forwards;
 }
 
+/* --- Error / no-match state --- */
+.error-msg {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.error-static {
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            rgba(255, 60, 60, 0.015) 1px,
+            transparent 2px,
+            transparent 4px
+        );
+    animation: static-flicker 0.15s steps(3) infinite;
+    pointer-events: none;
+}
+
+@keyframes static-flicker {
+    0%   { opacity: 0.4; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.error-content {
+    text-align: center;
+    animation: error-glitch-in 0.5s ease-out forwards;
+    z-index: 1;
+}
+
+@keyframes error-glitch-in {
+    0%   { opacity: 0; transform: translateX(-8px) skewX(-2deg); filter: blur(4px); }
+    15%  { opacity: 1; transform: translateX(4px) skewX(1deg);   filter: blur(0); }
+    25%  { opacity: 0.6; transform: translateX(-2px) skewX(-0.5deg); }
+    35%  { opacity: 1; transform: translateX(1px) skewX(0deg); }
+    50%  { opacity: 0.8; }
+    100% { opacity: 1; transform: translateX(0) skewX(0deg); filter: blur(0); }
+}
+
+.error-icon {
+    font-size: 2.2rem;
+    color: rgba(255, 80, 60, 0.6);
+    margin-bottom: 12px;
+    text-shadow: 0 0 12px rgba(255, 60, 40, 0.4);
+}
+
+.error-code {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 80, 60, 0.8);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 8px rgba(255, 60, 40, 0.3);
+}
+
+.error-detail {
+    font-size: 0.8rem;
+    color: rgba(255, 80, 60, 0.4);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.error-query {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem;
+    color: rgba(255, 80, 60, 0.3);
+}
+
 /* ---------- Utility ---------- */
 .hidden {
     display: none !important;
