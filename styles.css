@@ -1,0 +1,213 @@
+/* ============================================================
+   GALACTIC REFINERY MATRIX — Retro Space Sci-Fi Theme
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Source+Code+Pro:wght@400;700&display=swap');
+
+/* ---------- Design tokens ---------- */
+:root {
+    --neon-green: #00ff66;
+    --neon-amber: #ffb300;
+    --neon-cyan: #00f0ff;
+    --dark-space: #0a0b10;
+    --panel-bg: rgba(16, 18, 27, 0.9);
+    --terminal-glow: rgba(0, 255, 102, 0.15);
+}
+
+/* ---------- Page ---------- */
+body {
+    background-color: var(--dark-space);
+    background-image:
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+        radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    color: #e0e6ed;
+    font-family: 'Source Code Pro', monospace;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ---------- Container + CRT scanline overlay ---------- */
+.container {
+    width: 100%;
+    max-width: 900px;
+    background: var(--panel-bg);
+    border: 2px solid var(--neon-cyan);
+    box-shadow:
+        0 0 20px rgba(0, 240, 255, 0.3),
+        inset 0 0 15px rgba(0, 240, 255, 0.1);
+    border-radius: 8px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background:
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+}
+
+/* ---------- Header ---------- */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px dashed var(--neon-cyan);
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--neon-cyan);
+    letter-spacing: 4px;
+    margin: 0 0 10px 0;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+}
+
+.subtitle {
+    color: var(--neon-amber);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ---------- Search box ---------- */
+.search-box {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+input[type="text"] {
+    flex: 1;
+    background: #05070a;
+    border: 1px solid var(--neon-green);
+    padding: 12px 20px;
+    color: var(--neon-green);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    outline: none;
+    box-shadow: 0 0 10px var(--terminal-glow);
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+button {
+    background: transparent;
+    border: 1px solid var(--neon-amber);
+    color: var(--neon-amber);
+    font-family: 'Orbitron', sans-serif;
+    padding: 0 25px;
+    cursor: pointer;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: var(--neon-amber);
+    color: var(--dark-space);
+    box-shadow: 0 0 15px rgba(255, 179, 0, 0.6);
+}
+
+/* ---------- Results panels ---------- */
+.results-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+.panel-title {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--neon-amber);
+    font-size: 1.1rem;
+    margin: 0 0 15px 0;
+    letter-spacing: 1px;
+    border-left: 3px solid var(--neon-amber);
+    padding-left: 10px;
+}
+
+.recipe-table-container {
+    border: 1px solid #2a2f45;
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(5, 7, 10, 0.8);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    background: #141923;
+    color: var(--neon-cyan);
+    padding: 12px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--neon-cyan);
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #1c2135;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+tr:hover {
+    background: rgba(0, 240, 255, 0.03);
+}
+
+.qty {
+    color: var(--neon-amber);
+    font-weight: bold;
+}
+
+.ingredient-link {
+    color: #e0e6ed;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.ingredient-link:hover {
+    color: var(--neon-green);
+}
+
+.output-cell {
+    color: var(--neon-green);
+    font-weight: bold;
+}
+
+.no-results {
+    color: #6272a4;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}

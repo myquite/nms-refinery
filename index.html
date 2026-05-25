@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GALACTIC REFINERY MATRIX</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>REFINER MATRIX v6.24</h1>
+        <div class="subtitle">Interstellar Ingredient Mapping Terminal</div>
+    </header>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="search-input"
+            placeholder="ENTER INGREDIENT ELEMENT (e.g., Carbon, Oxygen, Tritium)..."
+            autocomplete="off"
+        >
+        <button id="search-btn">Analyze</button>
+    </div>
+
+    <div id="results-container" class="results-section hidden">
+
+        <div class="panel">
+            <div class="panel-title">Component Utility (Used as Input)</div>
+            <div class="recipe-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Inputs Needed</th>
+                            <th>Target Output</th>
+                        </tr>
+                    </thead>
+                    <tbody id="input-results"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">Synthesis Path Matrix (Produced as Output)</div>
+            <div class="recipe-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Required Base Inputs</th>
+                            <th>Yield</th>
+                        </tr>
+                    </thead>
+                    <tbody id="output-results"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="welcome-message" class="no-results">
+        System online. Awaiting data input sequence...
+    </div>
+</div>
+
+<!-- Data and logic. data.js must load before script.js. -->
+<script src="data.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
