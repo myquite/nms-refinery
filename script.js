@@ -33,43 +33,37 @@
         REFINER_DB.flatMap(r => [r.output, ...r.inputs.map(i => i.name)])
     )].sort();
 
-    let acIndex = -1;   // currently highlighted suggestion
-    let ghostMatch = null; // current ghost-text completion target
+    let acIndex = -1;       // currently highlighted suggestion
+    let ghostMatch = null;   // current ghost-text completion target
+    let typedQuery = '';     // what the user actually typed (preserved across arrow keys)
 
-    function updateGhost(query, matches) {
-        const q = query.trim();
-        if (!q || matches.length === 0) {
+    function setGhost(name) {
+        if (!typedQuery || !name) {
             els.ghostText.textContent = '';
             ghostMatch = null;
             return;
         }
-        // Find the best prefix match (starts with typed text)
-        const prefixMatch = matches.find(n => n.toLowerCase().startsWith(q.toLowerCase()));
-        if (prefixMatch) {
-            // Show the typed portion (invisible) + the remaining portion (visible)
-            els.ghostText.textContent = q + prefixMatch.slice(q.length);
-            ghostMatch = prefixMatch;
-        } else {
-            els.ghostText.textContent = '';
-            ghostMatch = null;
-        }
+        // Show typed portion (invisible, same color as input) + remaining portion (faded)
+        els.ghostText.textContent = typedQuery + name.slice(typedQuery.length);
+        ghostMatch = name;
     }
 
     function showSuggestions(query) {
         const q = query.trim().toLowerCase();
+        typedQuery = query.trim();
         els.autocomplete.replaceChildren();
         acIndex = -1;
 
         if (!q) {
             els.autocomplete.classList.add('hidden');
-            updateGhost('', []);
+            setGhost(null);
             return;
         }
 
         const matches = allNames.filter(n => n.toLowerCase().includes(q));
         if (matches.length === 0) {
             els.autocomplete.classList.add('hidden');
-            updateGhost('', []);
+            setGhost(null);
             return;
         }
 
@@ -79,13 +73,21 @@
             els.autocomplete.appendChild(li);
         });
         els.autocomplete.classList.remove('hidden');
-        updateGhost(query, matches);
+
+        // Auto-highlight the best prefix match in the dropdown
+        const prefixIdx = matches.findIndex(n => n.toLowerCase().startsWith(q));
+        if (prefixIdx >= 0) {
+            highlightItem(prefixIdx);
+        } else {
+            setGhost(null);
+        }
     }
 
     function pickSuggestion(name) {
         els.autocomplete.classList.add('hidden');
         els.ghostText.textContent = '';
         ghostMatch = null;
+        typedQuery = '';
         searchFor(name);
     }
 
@@ -96,6 +98,9 @@
         Array.from(items).forEach((li, i) =>
             li.classList.toggle('ac-active', i === acIndex));
         items[acIndex].scrollIntoView({ block: 'nearest' });
+
+        // Update ghost text to match the highlighted item
+        setGhost(items[acIndex].dataset.value);
     }
 
     // ---------- Search ----------
@@ -292,6 +297,7 @@
         if (e.key === 'Tab' && ghostMatch) {
             e.preventDefault();
             els.searchInput.value = ghostMatch;
+            typedQuery = ghostMatch;
             els.ghostText.textContent = '';
             ghostMatch = null;
             showSuggestions(els.searchInput.value);
