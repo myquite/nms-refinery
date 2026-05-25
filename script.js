@@ -259,8 +259,18 @@
         els.errorQuery.textContent = '> ' + query;
     }
 
-    function blurOnMobile() {
-        if ('ontouchstart' in window) els.searchInput.blur();
+    function resetMobileZoom() {
+        if (!('ontouchstart' in window)) return;
+        els.searchInput.blur();
+        // Reset any iOS pinch/input zoom back to 1:1
+        const vp = document.querySelector('meta[name="viewport"]');
+        if (vp) {
+            vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
+            // Restore user-scalable after reset
+            setTimeout(() => {
+                vp.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            }, 100);
+        }
     }
 
     function runSearch(query) {
@@ -275,12 +285,12 @@
         // No matches at all — show error state
         if (result.asInput.length === 0 && result.asOutput.length === 0) {
             showError(query);
-            blurOnMobile();
+            resetMobileZoom();
             return;
         }
 
         render(result);
-        blurOnMobile();
+        resetMobileZoom();
     }
 
     function searchFor(name) {
